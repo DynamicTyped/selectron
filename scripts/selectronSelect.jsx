@@ -13,7 +13,7 @@ var React = require('react/addons');
 var SelectronSelect = React.createClass({
   render: function(){
     //show placeholder or the text
-    var text = this.props.selected && this.props.selected.text !== "" ? this.props.selected.text : this.props.placeholder;
+    var text = this.props.selected && this.props.selected.length > 0 && this.props.selected[0].text !== "" ? this.props.selected[0].text : this.props.placeholder;
     return (<div className="selector" onClick={this.props.toggleDrop}>{text}</div>);
   }
 });

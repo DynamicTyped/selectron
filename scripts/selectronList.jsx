@@ -16,7 +16,8 @@ var SelectronList = React.createClass({
   render: function(){
       var that = this;
       var options = this.props.options.map(function(option, index){
-          return <SelectronListItem option={option} setValue={that.props.setValue}/>
+        debugger;
+          return <SelectronListItem option={option} addToSelected={that.props.addToSelected} removeFromSelected={that.props.removeFromSelected}/>
       });
       //add search
       options.unshift(<li className="filter"><SelectronSearch setFilter={this.props.setFilter} filterPlaceholder={this.props.filterPlaceholder}/></li>)
