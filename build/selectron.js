@@ -75,9 +75,19 @@ var Selectron =
 	      "type": "select"
 	    }
 	},
+	toggleSelected: function(value){
+	  var result = _.where(this.props.selected, { value: value});
+
+	  //if this is in selected list, remove it. 
+	  //if this is not in list add it. 
+	  if(result.length > 0){
+	    removeFromSelected(value); 
+	  } else {
+	    addToSelected(value);
+	  }
+	},
 	addToSelected: function(value){
-	  var results = _.where(options, { value: value}).concat(this.props.selected);;
-	  debugger; 
+	  var results = _.where(options, { value: value}).concat(this.props.selected);
 	  this.setProps({selected: results||[], showDrop: false, filter: "", filteredOptions: [] });
 	},
 	removeFromSelected: function(value){
@@ -166,7 +176,21 @@ var Selectron =
 	var SelectronSelect = React.createClass({displayName: 'SelectronSelect',
 	  render: function(){
 	    //show placeholder or the text
-	    var text = this.props.selected && this.props.selected.length > 0 && this.props.selected[0].text !== "" ? this.props.selected[0].text : this.props.placeholder;
+		var selectedItems = "";
+
+	    if (this.props.selected && this.props.selected.length > 0){
+
+	    //get the current selected items into a comma separated list - it's very possible map reduce is overkill....
+		selectedItems = _.reduce(_.map(this.props.selected, function(item){
+				   //if it has a key named text use it -- otherwise just return the item
+				   return item.text; 
+				}), function(memo, item){
+					debugger;
+					return memo.length === 0 ? memo.text : (memo + (memo.length > 0 ? ", " : "") + item);
+			});
+	    }
+
+	    var text = selectedItems||this.props.placeholder;
 	    return (React.DOM.div({className: "selector", onClick: this.props.toggleDrop}, text));
 	  }
 	});

@@ -28,9 +28,19 @@ getDefaultProps: function(){
       "type": "select"
     }
 },
+toggleSelected: function(value){
+  var result = _.where(this.props.selected, { value: value});
+
+  //if this is in selected list, remove it. 
+  //if this is not in list add it. 
+  if(result.length > 0){
+    removeFromSelected(value); 
+  } else {
+    addToSelected(value);
+  }
+},
 addToSelected: function(value){
-  var results = _.where(options, { value: value}).concat(this.props.selected);;
-  debugger; 
+  var results = _.where(options, { value: value}).concat(this.props.selected);
   this.setProps({selected: results||[], showDrop: false, filter: "", filteredOptions: [] });
 },
 removeFromSelected: function(value){
