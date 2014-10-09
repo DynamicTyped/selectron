@@ -22,7 +22,6 @@ var SelectronSelect = React.createClass({
 			   //if it has a key named text use it -- otherwise just return the item
 			   return item.text; 
 			}), function(memo, item){
-				debugger;
 				return memo.length === 0 ? memo.text : (memo + (memo.length > 0 ? ", " : "") + item);
 		});
     }

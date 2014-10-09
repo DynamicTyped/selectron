@@ -77,13 +77,12 @@ var Selectron =
 	},
 	toggleSelected: function(value){
 	  var result = _.where(this.props.selected, { value: value});
-
 	  //if this is in selected list, remove it. 
 	  //if this is not in list add it. 
 	  if(result.length > 0){
-	    removeFromSelected(value); 
+	    this.removeFromSelected(value); 
 	  } else {
-	    addToSelected(value);
+	    this.addToSelected(value);
 	  }
 	},
 	addToSelected: function(value){
@@ -92,7 +91,9 @@ var Selectron =
 	},
 	removeFromSelected: function(value){
 	  var results = _.where(options, { value: value});
-	  this.setProps({selected: _.without(this.props.selected, results)||[], showDrop: false, filter: "", filteredOptions: [] });
+	  if(results.length > 0){
+	    this.setProps({selected: _.without(this.props.selected, results[0])||[], showDrop: false, filter: "", filteredOptions: [] });
+	  }
 	},
 	setFilter: function(value){          
 	  var filtered = _.filter(this.props.options, function(item){
@@ -107,7 +108,7 @@ var Selectron =
 	render: function(){
 	  options = (this.props.filteredOptions&&this.props.filteredOptions.length>0) ? this.props.filteredOptions : this.props.options;
 	  return SelectronContainer({toggleDrop: this.toggleDrop, showDrop: this.props.showDrop, options: options, selected: this.props.selected, 
-	    addToSelected: this.addToSelected, removeFromSelected: this.removeFromSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder})
+	    toggleSelected: this.toggleSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder})
 	}
 	});
 
@@ -148,8 +149,8 @@ var Selectron =
 	      return (
 	          React.DOM.div({className: "selectable-container"}, 
 	            SelectronSelect({toggleDrop: this.props.toggleDrop, showDrop: this.props.showDrop, selected: this.props.selected, placeholder: this.props.placeholder}), 
-	            SelectronDropContainer({toggleDrop: this.props.toggleDrop, options: this.props.options, showDrop: this.props.showDrop, 
-	              addToSelected: this.props.addToSelected, removeFromSelected: this.props.removeFromSelected, setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder})
+	            SelectronDropContainer({toggleDrop: this.props.toggleDrop, options: this.props.options, showDrop: this.props.showDrop, selected: this.props.selected, 
+	              toggleSelected: this.props.toggleSelected, setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder})
 	          )
 	      );
 	  }
@@ -185,7 +186,6 @@ var Selectron =
 				   //if it has a key named text use it -- otherwise just return the item
 				   return item.text; 
 				}), function(memo, item){
-					debugger;
 					return memo.length === 0 ? memo.text : (memo + (memo.length > 0 ? ", " : "") + item);
 			});
 	    }
@@ -216,7 +216,7 @@ var Selectron =
 
 	var SelectronDropContainer = React.createClass({displayName: 'SelectronDropContainer',
 	  render: function(){
-	      var ret = this.props.showDrop ? SelectronList({options: this.props.options, addToSelected: this.props.addToSelected, removeFromSelected: this.props.removeFromSelected, 
+	      var ret = this.props.showDrop ? SelectronList({options: this.props.options, toggleSelected: this.props.toggleSelected, selected: this.props.selected, 
 	        setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder}) : "";
 
 	      return(
@@ -251,7 +251,7 @@ var Selectron =
 	  render: function(){
 	      var that = this;
 	      var options = this.props.options.map(function(option, index){
-	          return SelectronListItem({option: option, addToSelected: that.props.addToSelected, removeFromSelected: that.props.removeFromSelected})
+	          return SelectronListItem({option: option, toggleSelected: that.props.toggleSelected, selected: that.props.selected})
 	      });
 	      //add search
 	      options.unshift(React.DOM.li({className: "filter"}, SelectronSearch({setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder})))
@@ -279,10 +279,11 @@ var Selectron =
 
 	var SelectronListItem = React.createClass({displayName: 'SelectronListItem',
 	  handleClick: function(){
-	      this.props.addToSelected(this.props.option.value);
+	      this.props.toggleSelected(this.props.option.value);
 	  },
 	  render: function(){
-	    return React.DOM.li({onClick: this.handleClick}, this.props.option.text)
+	    var className = (typeof _.findWhere(this.props.selected, {value: this.props.option.value}) === "undefined") ? "" : "checked";
+	    return React.DOM.li({onClick: this.handleClick, className: className}, this.props.option.text)
 	  }
 	});
 

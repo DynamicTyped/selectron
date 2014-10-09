@@ -30,13 +30,12 @@ getDefaultProps: function(){
 },
 toggleSelected: function(value){
   var result = _.where(this.props.selected, { value: value});
-
   //if this is in selected list, remove it. 
   //if this is not in list add it. 
   if(result.length > 0){
-    removeFromSelected(value); 
+    this.removeFromSelected(value); 
   } else {
-    addToSelected(value);
+    this.addToSelected(value);
   }
 },
 addToSelected: function(value){
@@ -45,7 +44,9 @@ addToSelected: function(value){
 },
 removeFromSelected: function(value){
   var results = _.where(options, { value: value});
-  this.setProps({selected: _.without(this.props.selected, results)||[], showDrop: false, filter: "", filteredOptions: [] });
+  if(results.length > 0){
+    this.setProps({selected: _.without(this.props.selected, results[0])||[], showDrop: false, filter: "", filteredOptions: [] });
+  }
 },
 setFilter: function(value){          
   var filtered = _.filter(this.props.options, function(item){
@@ -60,7 +61,7 @@ toggleDrop: function(){
 render: function(){
   options = (this.props.filteredOptions&&this.props.filteredOptions.length>0) ? this.props.filteredOptions : this.props.options;
   return <SelectronContainer toggleDrop={this.toggleDrop} showDrop={this.props.showDrop} options={options} selected={this.props.selected} 
-    addToSelected={this.addToSelected} removeFromSelected={this.removeFromSelected} setFilter={this.setFilter} placeholder={this.props.placeholder} filterPlaceholder={this.props.filterPlaceholder}/>
+    toggleSelected={this.toggleSelected} setFilter={this.setFilter} placeholder={this.props.placeholder} filterPlaceholder={this.props.filterPlaceholder}/>
 }
 });
 

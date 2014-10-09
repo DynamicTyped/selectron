@@ -12,10 +12,11 @@ var React = require('react/addons');
 
 var SelectronListItem = React.createClass({
   handleClick: function(){
-      this.props.addToSelected(this.props.option.value);
+      this.props.toggleSelected(this.props.option.value);
   },
   render: function(){
-    return <li onClick={this.handleClick}>{this.props.option.text}</li>
+    var className = (typeof _.findWhere(this.props.selected, {value: this.props.option.value}) === "undefined") ? "" : "checked";
+    return <li onClick={this.handleClick} className={className}>{this.props.option.text}</li>
   }
 });
 

@@ -13,7 +13,7 @@ var SelectronList = require('./selectronList.jsx');
 
 var SelectronDropContainer = React.createClass({
   render: function(){
-      var ret = this.props.showDrop ? <SelectronList options={this.props.options} addToSelected={this.props.addToSelected} removeFromSelected={this.props.removeFromSelected} 
+      var ret = this.props.showDrop ? <SelectronList options={this.props.options} toggleSelected={this.props.toggleSelected} selected={this.props.selected} 
         setFilter={this.props.setFilter} filterPlaceholder={this.props.filterPlaceholder}/> : "";
 
       return(

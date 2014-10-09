@@ -101,6 +101,16 @@
         max-width: 100%;
         border: 1px solid #CCC;
       }
+
+      .selectable-container li:before{
+        content: '';
+        color: #777;
+        width: 10px;
+      }
+      .selectable-container li.checked:before{
+        content:'\2713';
+        color: #777;
+      }
     </style>
   </head>
   <body>

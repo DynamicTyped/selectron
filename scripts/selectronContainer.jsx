@@ -17,8 +17,8 @@ var SelectronContainer = React.createClass({
       return (
           <div className="selectable-container">
             <SelectronSelect toggleDrop={this.props.toggleDrop} showDrop={this.props.showDrop} selected={this.props.selected} placeholder={this.props.placeholder}/>
-            <SelectronDropContainer toggleDrop={this.props.toggleDrop} options={this.props.options} showDrop={this.props.showDrop} 
-              addToSelected={this.props.addToSelected} removeFromSelected={this.props.removeFromSelected} setFilter={this.props.setFilter} filterPlaceholder={this.props.filterPlaceholder}/>
+            <SelectronDropContainer toggleDrop={this.props.toggleDrop} options={this.props.options} showDrop={this.props.showDrop} selected={this.props.selected}
+              toggleSelected={this.props.toggleSelected} setFilter={this.props.setFilter} filterPlaceholder={this.props.filterPlaceholder}/>
           </div>
       );
   }
