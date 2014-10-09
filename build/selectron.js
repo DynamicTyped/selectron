@@ -76,12 +76,13 @@ var Selectron =
 	    }
 	},
 	addToSelected: function(value){
-	  debugger;
-	  this.props.selected.push(value);
-	  this.setProps({selected: this.props.selected||[], showDrop: false, filter: "", filteredOptions: [] });
+	  var results = _.where(options, { value: value}).concat(this.props.selected);;
+	  debugger; 
+	  this.setProps({selected: results||[], showDrop: false, filter: "", filteredOptions: [] });
 	},
 	removeFromSelected: function(value){
-	  this.setProps({selected: _.without(this.props.selected, value)||[], showDrop: false, filter: "", filteredOptions: [] });
+	  var results = _.where(options, { value: value});
+	  this.setProps({selected: _.without(this.props.selected, results)||[], showDrop: false, filter: "", filteredOptions: [] });
 	},
 	setFilter: function(value){          
 	  var filtered = _.filter(this.props.options, function(item){
@@ -95,7 +96,6 @@ var Selectron =
 	},
 	render: function(){
 	  options = (this.props.filteredOptions&&this.props.filteredOptions.length>0) ? this.props.filteredOptions : this.props.options;
-	  debugger;
 	  return SelectronContainer({toggleDrop: this.toggleDrop, showDrop: this.props.showDrop, options: options, selected: this.props.selected, 
 	    addToSelected: this.addToSelected, removeFromSelected: this.removeFromSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder})
 	}
@@ -227,7 +227,6 @@ var Selectron =
 	  render: function(){
 	      var that = this;
 	      var options = this.props.options.map(function(option, index){
-	        debugger;
 	          return SelectronListItem({option: option, addToSelected: that.props.addToSelected, removeFromSelected: that.props.removeFromSelected})
 	      });
 	      //add search
@@ -256,7 +255,6 @@ var Selectron =
 
 	var SelectronListItem = React.createClass({displayName: 'SelectronListItem',
 	  handleClick: function(){
-	    debugger;
 	      this.props.addToSelected(this.props.option.value);
 	  },
 	  render: function(){

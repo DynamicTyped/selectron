@@ -12,7 +12,6 @@ var React = require('react/addons');
 
 var SelectronListItem = React.createClass({
   handleClick: function(){
-    debugger;
       this.props.addToSelected(this.props.option.value);
   },
   render: function(){
