@@ -73,7 +73,7 @@ var Selectron =
 	      "placeholder": "Please choose",
 	      "filterPlaceholder":"filter",
 	      "multiSelect": false,
-	      "taggable": false,
+	      "taggable": true,
 	      "dataChanged": null
 	    }
 	},
@@ -120,9 +120,9 @@ var Selectron =
 	},
 	render: function(){
 	  options = (this.props.filteredOptions&&this.props.filteredOptions.length>0) ? this.props.filteredOptions : this.props.options;
-	  className = this.props.multiSelect ? "multiselect" : "";
+	  className = this.props.taggable ? "taggable" : this.props.multiSelect ? "multiselect" : "" ;
 	  return SelectronContainer({toggleDrop: this.toggleDrop, className: className, showDrop: this.props.showDrop, options: options, selected: this.props.selected, 
-	    toggleSelected: this.toggleSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder})
+	    toggleSelected: this.toggleSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder, tagglable: this.props.taggable})
 	}
 	});
 
@@ -166,7 +166,7 @@ var Selectron =
 	          React.DOM.div({className: className}, 
 	            SelectronSelect({toggleDrop: this.props.toggleDrop, showDrop: this.props.showDrop, selected: this.props.selected, placeholder: this.props.placeholder}), 
 	            SelectronDropContainer({toggleDrop: this.props.toggleDrop, options: this.props.options, showDrop: this.props.showDrop, selected: this.props.selected, 
-	              toggleSelected: this.props.toggleSelected, setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder})
+	              toggleSelected: this.props.toggleSelected, setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder, taggable: this.props.taggable})
 	          )
 	      );
 	  }
@@ -233,7 +233,7 @@ var Selectron =
 	var SelectronDropContainer = React.createClass({displayName: 'SelectronDropContainer',
 	  render: function(){
 	      var ret = this.props.showDrop ? SelectronList({options: this.props.options, toggleSelected: this.props.toggleSelected, selected: this.props.selected, 
-	        setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder}) : "";
+	        setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder, taggable: this.props.taggable}) : "";
 
 	      return(
 	        React.DOM.div({className: "selectable-drop-container"}, 
@@ -266,7 +266,8 @@ var Selectron =
 	var SelectronList = React.createClass({displayName: 'SelectronList',
 	  render: function(){
 	      var that = this;
-	      var options = this.props.options.map(function(option, index){
+	      var options = _.difference(that.props.options, that.props.selected).map(function(option, index){
+	        debugger;
 	          return SelectronListItem({option: option, toggleSelected: that.props.toggleSelected, selected: that.props.selected})
 	      });
 	      //add search

@@ -20,7 +20,7 @@ var SelectronContainer = React.createClass({
           <div className={className}>
             <SelectronSelect toggleDrop={this.props.toggleDrop} showDrop={this.props.showDrop} selected={this.props.selected} placeholder={this.props.placeholder}/>
             <SelectronDropContainer toggleDrop={this.props.toggleDrop} options={this.props.options} showDrop={this.props.showDrop} selected={this.props.selected}
-              toggleSelected={this.props.toggleSelected} setFilter={this.props.setFilter} filterPlaceholder={this.props.filterPlaceholder}/>
+              toggleSelected={this.props.toggleSelected} setFilter={this.props.setFilter} filterPlaceholder={this.props.filterPlaceholder} taggable={this.props.taggable} />
           </div>
       );
   }
