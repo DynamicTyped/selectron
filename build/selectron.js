@@ -72,16 +72,29 @@ var Selectron =
 	      "filter": "",
 	      "placeholder": "Please choose",
 	      "filterPlaceholder":"filter",
-	      "type": "select"
+	      "multiSelect": false,
+	      "taggable": false,
+	      "dataChanged": null
 	    }
 	},
 	toggleSelected: function(value){
 	  var result = _.where(this.props.selected, { value: value});
 	  //if this is in selected list, remove it. 
 	  //if this is not in list add it. 
-	  if(result.length > 0){
-	    this.removeFromSelected(value); 
+	  if(this.props.multiSelect || this.props.taggable){
+	    if(result.length > 0){
+	      this.removeFromSelected(value); 
+	    } else {
+	      this.addToSelected(value);
+	    }
 	  } else {
+	    //clear all and add if not currently selected
+	    if (result.length > 0){
+	      return; 
+	    }
+
+	    //modifying the props directly because we're storing it right after
+	    this.props.selected = [];
 	    this.addToSelected(value);
 	  }
 	},
@@ -107,7 +120,8 @@ var Selectron =
 	},
 	render: function(){
 	  options = (this.props.filteredOptions&&this.props.filteredOptions.length>0) ? this.props.filteredOptions : this.props.options;
-	  return SelectronContainer({toggleDrop: this.toggleDrop, showDrop: this.props.showDrop, options: options, selected: this.props.selected, 
+	  className = this.props.multiSelect ? "multiselect" : "";
+	  return SelectronContainer({toggleDrop: this.toggleDrop, className: className, showDrop: this.props.showDrop, options: options, selected: this.props.selected, 
 	    toggleSelected: this.toggleSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder})
 	}
 	});
@@ -146,8 +160,10 @@ var Selectron =
 
 	var SelectronContainer = React.createClass({displayName: 'SelectronContainer',
 	  render: function(){
+	      className = (this.props.className&&this.props.className + " ") + "selectable-container";
+
 	      return (
-	          React.DOM.div({className: "selectable-container"}, 
+	          React.DOM.div({className: className}, 
 	            SelectronSelect({toggleDrop: this.props.toggleDrop, showDrop: this.props.showDrop, selected: this.props.selected, placeholder: this.props.placeholder}), 
 	            SelectronDropContainer({toggleDrop: this.props.toggleDrop, options: this.props.options, showDrop: this.props.showDrop, selected: this.props.selected, 
 	              toggleSelected: this.props.toggleSelected, setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder})
