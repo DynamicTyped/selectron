@@ -12,6 +12,11 @@ var React = require('react/addons');
 var SelectronTagItem = require('./selectronTagItem.jsx'); 
 
 var SelectronSelect = React.createClass({
+  handleClick: function(e){
+    if(e.target.nodeName.toLowerCase() !== "button"){
+      this.props.toggleDrop();
+    }
+  },
   render: function(){
     var that = this; 
     //show placeholder or the text
@@ -25,7 +30,7 @@ var SelectronSelect = React.createClass({
     }
 
     var text = selectedItems||this.props.placeholder;
-    return (<div className="selector" onClick={this.props.toggleDrop}>{text}</div>);
+    return (<div className="selector" onClick={this.handleClick}>{text}</div>);
   }
 });
 

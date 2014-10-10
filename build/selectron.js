@@ -193,6 +193,11 @@ var Selectron =
 	var SelectronTagItem = __webpack_require__(6); 
 
 	var SelectronSelect = React.createClass({displayName: 'SelectronSelect',
+	  handleClick: function(e){
+	    if(e.target.nodeName.toLowerCase() !== "button"){
+	      this.props.toggleDrop();
+	    }
+	  },
 	  render: function(){
 	    var that = this; 
 	    //show placeholder or the text
@@ -206,7 +211,7 @@ var Selectron =
 	    }
 
 	    var text = selectedItems||this.props.placeholder;
-	    return (React.DOM.div({className: "selector", onClick: this.props.toggleDrop}, text));
+	    return (React.DOM.div({className: "selector", onClick: this.handleClick}, text));
 	  }
 	});
 
