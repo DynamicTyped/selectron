@@ -84,7 +84,10 @@
         padding: 0px;
         margin: 0px;
       }
-
+      .selectable-container li{
+        margin-left:10px;
+        position: relative;
+      }
       .selectable-container li:hover{
         background-color: #66afe9; 
         color: #FFF;
@@ -102,15 +105,32 @@
         border: 1px solid #CCC;
       }
 
-      .selectable-container li:before{
-        content: '';
-        color: #777;
-        width: 10px;
-      }
       .selectable-container li.checked:before{
+        font-size: 12px;
+        position: absolute;
+        left: -15px;
+        top: 5px;
         content:'\2713';
         color: #777;
       }
+
+      .selectable-container li:after{
+        font-size: 12px;
+        position: absolute;
+        left: -15px;
+        top: 5px;
+        content:'\214B';
+        color: #777;
+      }
+
+      .selectable-container li:first-child{
+        margin-left: 0px;
+      }
+
+      .selectable-container li:first-child:before, .selectable-container li:first-child:after{
+        content: '';
+      }
+
     </style>
   </head>
   <body>
