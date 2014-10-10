@@ -15,8 +15,7 @@ var SelectronSearch = require('./SelectronSearch.jsx');
 var SelectronList = React.createClass({
   render: function(){
       var that = this;
-      var options = _.difference(that.props.options, that.props.selected).map(function(option, index){
-        debugger;
+      var options = (this.props.taggable ? _.difference(that.props.options, that.props.selected) : this.props.options).map(function(option, index){
           return <SelectronListItem option={option} toggleSelected={that.props.toggleSelected} selected={that.props.selected}/>
       });
       //add search

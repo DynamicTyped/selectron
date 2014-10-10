@@ -75,7 +75,7 @@ render: function(){
   options = (this.props.filteredOptions&&this.props.filteredOptions.length>0) ? this.props.filteredOptions : this.props.options;
   className = this.props.taggable ? "taggable" : this.props.multiSelect ? "multiselect" : "" ;
   return <SelectronContainer toggleDrop={this.toggleDrop} className={className} showDrop={this.props.showDrop} options={options} selected={this.props.selected} 
-    toggleSelected={this.toggleSelected} setFilter={this.setFilter} placeholder={this.props.placeholder} filterPlaceholder={this.props.filterPlaceholder} tagglable={this.props.taggable}/>
+    toggleSelected={this.toggleSelected} setFilter={this.setFilter} placeholder={this.props.placeholder} filterPlaceholder={this.props.filterPlaceholder} taggable={this.props.taggable}/>
 }
 });
 

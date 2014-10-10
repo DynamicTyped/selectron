@@ -15,10 +15,11 @@ var SelectronDropContainer = require('./selectronDropContainer.jsx');
 var SelectronContainer = React.createClass({
   render: function(){
       className = (this.props.className&&this.props.className + " ") + "selectable-container";
-
       return (
-          <div className={className}>
-            <SelectronSelect toggleDrop={this.props.toggleDrop} showDrop={this.props.showDrop} selected={this.props.selected} placeholder={this.props.placeholder}/>
+          <div className={className}> 
+            <SelectronSelect toggleDrop={this.props.toggleDrop} showDrop={this.props.showDrop} 
+              selected={this.props.selected} placeholder={this.props.placeholder} taggable={this.props.taggable} toggleSelected={this.props.toggleSelected}/>
+              
             <SelectronDropContainer toggleDrop={this.props.toggleDrop} options={this.props.options} showDrop={this.props.showDrop} selected={this.props.selected}
               toggleSelected={this.props.toggleSelected} setFilter={this.props.setFilter} filterPlaceholder={this.props.filterPlaceholder} taggable={this.props.taggable} />
           </div>

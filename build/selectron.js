@@ -122,7 +122,7 @@ var Selectron =
 	  options = (this.props.filteredOptions&&this.props.filteredOptions.length>0) ? this.props.filteredOptions : this.props.options;
 	  className = this.props.taggable ? "taggable" : this.props.multiSelect ? "multiselect" : "" ;
 	  return SelectronContainer({toggleDrop: this.toggleDrop, className: className, showDrop: this.props.showDrop, options: options, selected: this.props.selected, 
-	    toggleSelected: this.toggleSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder, tagglable: this.props.taggable})
+	    toggleSelected: this.toggleSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder, taggable: this.props.taggable})
 	}
 	});
 
@@ -161,10 +161,11 @@ var Selectron =
 	var SelectronContainer = React.createClass({displayName: 'SelectronContainer',
 	  render: function(){
 	      className = (this.props.className&&this.props.className + " ") + "selectable-container";
-
 	      return (
 	          React.DOM.div({className: className}, 
-	            SelectronSelect({toggleDrop: this.props.toggleDrop, showDrop: this.props.showDrop, selected: this.props.selected, placeholder: this.props.placeholder}), 
+	            SelectronSelect({toggleDrop: this.props.toggleDrop, showDrop: this.props.showDrop, 
+	              selected: this.props.selected, placeholder: this.props.placeholder, taggable: this.props.taggable, toggleSelected: this.props.toggleSelected}), 
+	              
 	            SelectronDropContainer({toggleDrop: this.props.toggleDrop, options: this.props.options, showDrop: this.props.showDrop, selected: this.props.selected, 
 	              toggleSelected: this.props.toggleSelected, setFilter: this.props.setFilter, filterPlaceholder: this.props.filterPlaceholder, taggable: this.props.taggable})
 	          )
@@ -189,21 +190,19 @@ var Selectron =
 	*/
 
 	var React = __webpack_require__(1);
+	var SelectronTagItem = __webpack_require__(6); 
 
 	var SelectronSelect = React.createClass({displayName: 'SelectronSelect',
 	  render: function(){
+	    var that = this; 
 	    //show placeholder or the text
 		var selectedItems = "";
 
 	    if (this.props.selected && this.props.selected.length > 0){
 
-	    //get the current selected items into a comma separated list - it's very possible map reduce is overkill....
-		selectedItems = _.reduce(_.map(this.props.selected, function(item){
-				   //if it has a key named text use it -- otherwise just return the item
-				   return item.text; 
-				}), function(memo, item){
-					return memo.length === 0 ? memo.text : (memo + (memo.length > 0 ? ", " : "") + item);
-			});
+	      var selectedItems = that.props.taggable ? 
+	        _.map(this.props.selected, function(item, index){ return SelectronTagItem({option: item, toggleSelected: that.props.toggleSelected}) }) : 
+	        _.map(this.props.selected, function(item, index){ return (index > 0 ? ", " : "") + item.text; });
 	    }
 
 	    var text = selectedItems||this.props.placeholder;
@@ -228,7 +227,7 @@ var Selectron =
 	*/
 
 	var React = __webpack_require__(1);
-	var SelectronList = __webpack_require__(6);
+	var SelectronList = __webpack_require__(7);
 
 	var SelectronDropContainer = React.createClass({displayName: 'SelectronDropContainer',
 	  render: function(){
@@ -260,14 +259,40 @@ var Selectron =
 	*/
 
 	var React = __webpack_require__(1);
-	var SelectronListItem = __webpack_require__(7);
-	var SelectronSearch = __webpack_require__(8);
+
+	var SelectronTagItem = React.createClass({displayName: 'SelectronTagItem',
+	  handleClick: function(e){
+	    this.props.toggleSelected(e.target.dataset.value);
+	  },
+	  render: function(){
+	    return React.DOM.button({type: "button", class: "btn btn-primary", 'data-value': this.props.option.value, onClick: this.handleClick}, this.props.option.text)
+	  }
+	});
+
+	module.exports = SelectronTagItem; 
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+
+	/*
+	   Selectron - Select Component for React
+	   https://github.com/DynamicTyped/selectron
+	   Copyright (c) 2014 DynamicTyped
+
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/selectron/master/LICENSE
+	*/
+
+	var React = __webpack_require__(1);
+	var SelectronListItem = __webpack_require__(8);
+	var SelectronSearch = __webpack_require__(9);
 
 	var SelectronList = React.createClass({displayName: 'SelectronList',
 	  render: function(){
 	      var that = this;
-	      var options = _.difference(that.props.options, that.props.selected).map(function(option, index){
-	        debugger;
+	      var options = (this.props.taggable ? _.difference(that.props.options, that.props.selected) : this.props.options).map(function(option, index){
 	          return SelectronListItem({option: option, toggleSelected: that.props.toggleSelected, selected: that.props.selected})
 	      });
 	      //add search
@@ -279,7 +304,7 @@ var Selectron =
 	module.exports = SelectronList; 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	 /** @jsx React.DOM */
@@ -307,7 +332,7 @@ var Selectron =
 	module.exports = SelectronListItem; 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */
