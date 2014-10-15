@@ -19,12 +19,21 @@
          $.colorbox({html: "<div class='in-modal' id='selectable2'></div>", onComplete: addModalRender, scrolling: false, width: "200px", closeButton: false});
         });
       });
+
+      var dataChange = function(value){
+        var text = ""; 
+        $.each(value,  function(index, item){
+          text += text.length > 0 ? ", " + item.value : item.value;
+        });
+
+        $("#currentValues").text(text);
+      }
     </script>
 
    <script type="text/jsx">
       /** @jsx React.DOM */
       function addModalRender(){
-        React.renderComponent(<Selectron options={options}/>, document.getElementById('selectable2'));
+        React.renderComponent(<Selectron options={options} dataChanged={dataChange} />, document.getElementById('selectable2'));
         $.colorbox.resize();
       }
    </script>
@@ -145,11 +154,15 @@
     </style>
   </head>
   <body>
+    <div>
+      <strong>Current Values:</strong> 
+      <span id="currentValues"></span>
+    </div>
     <div id="selectable"></div>
 
     <script type="text/jsx">
       /** @jsx React.DOM */
-      React.renderComponent(<Selectron options={options}/>, document.getElementById('selectable'));
+      React.renderComponent(<Selectron options={options} dataChanged={dataChange}/>, document.getElementById('selectable'));
     </script>
     <button class="load-modal">Modal</button>
   </body>

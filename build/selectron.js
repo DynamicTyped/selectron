@@ -73,7 +73,7 @@ var Selectron =
 	      "placeholder": "Please choose",
 	      "filterPlaceholder":"filter",
 	      "multiSelect": false,
-	      "taggable": true,
+	      "taggable": false,
 	      "dataChanged": null
 	    }
 	},
@@ -100,12 +100,15 @@ var Selectron =
 	},
 	addToSelected: function(value){
 	  var results = _.where(options, { value: value}).concat(this.props.selected);
+	  this.props.dataChanged&&this.props.dataChanged(results);
 	  this.setProps({selected: results||[], showDrop: false, filter: "", filteredOptions: [] });
 	},
 	removeFromSelected: function(value){
 	  var results = _.where(options, { value: value});
+	  var remaining = _.without(this.props.selected, results[0])||[];
+	  this.props.dataChanged&&this.props.dataChanged(remaining);
 	  if(results.length > 0){
-	    this.setProps({selected: _.without(this.props.selected, results[0])||[], showDrop: false, filter: "", filteredOptions: [] });
+	    this.setProps({selected: remaining, showDrop: false, filter: "", filteredOptions: [] });
 	  }
 	},
 	setFilter: function(value){          
