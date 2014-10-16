@@ -77,8 +77,20 @@ var Selectron =
 	      "dataChanged": null
 	    }
 	},
+	getInitialState: function(){
+	  //these are items that are passed in via props
+	  //but we will need to maintain as state inside this component
+	  //this is generally an anti-pattern if synchonization is the goal but it is really not here
+	  var retItem =  {
+	    "selected": this.props.selected,
+	    "showDrop": this.props.showDrop,
+	    "filteredOptions": this.props.filteredOptions,
+	    "filter": this.props.filter
+	  };
+	  return retItem;
+	},
 	toggleSelected: function(value){
-	  var result = _.where(this.props.selected, { value: value});
+	  var result = _.where(this.state.selected, { value: value});
 	  //if this is in selected list, remove it. 
 	  //if this is not in list add it. 
 	  if(this.props.multiSelect || this.props.taggable){
@@ -94,21 +106,21 @@ var Selectron =
 	    }
 
 	    //modifying the props directly because we're storing it right after
-	    this.props.selected = [];
+	    this.state.selected = [];
 	    this.addToSelected(value);
 	  }
 	},
 	addToSelected: function(value){
-	  var results = _.where(options, { value: value}).concat(this.props.selected);
+	  var results = _.where(options, { value: value}).concat(this.state.selected);
 	  this.props.dataChanged&&this.props.dataChanged(results);
-	  this.setProps({selected: results||[], showDrop: false, filter: "", filteredOptions: [] });
+	  this.setState({selected: results||[], showDrop: false, filter: "", filteredOptions: [] });
 	},
 	removeFromSelected: function(value){
 	  var results = _.where(options, { value: value});
-	  var remaining = _.without(this.props.selected, results[0])||[];
+	  var remaining = _.without(this.state.selected, results[0])||[];
 	  this.props.dataChanged&&this.props.dataChanged(remaining);
 	  if(results.length > 0){
-	    this.setProps({selected: remaining, showDrop: false, filter: "", filteredOptions: [] });
+	    this.setState({selected: remaining, showDrop: false, filter: "", filteredOptions: [] });
 	  }
 	},
 	setFilter: function(value){          
@@ -116,15 +128,15 @@ var Selectron =
 	    return (item.text.toLowerCase().indexOf(value.toLowerCase()) >= 0)||(item.value.toLowerCase().indexOf(value.toLowerCase()) >= 0)
 	  });
 
-	  this.setProps({filteredOptions: filtered, filter:value})
+	  this.setState({filteredOptions: filtered, filter:value})
 	},
 	toggleDrop: function(){
-	    this.setProps({showDrop: false==this.props.showDrop});
+	    this.setState({showDrop: false==this.state.showDrop});
 	},
 	render: function(){
-	  options = (this.props.filteredOptions&&this.props.filteredOptions.length>0) ? this.props.filteredOptions : this.props.options;
+	  options = (this.state.filteredOptions&&this.state.filteredOptions.length>0) ? this.state.filteredOptions : this.props.options;
 	  className = this.props.taggable ? "taggable" : this.props.multiSelect ? "multiselect" : "" ;
-	  return SelectronContainer({toggleDrop: this.toggleDrop, className: className, showDrop: this.props.showDrop, options: options, selected: this.props.selected, 
+	  return SelectronContainer({toggleDrop: this.toggleDrop, className: className, showDrop: this.state.showDrop, options: options, selected: this.state.selected, 
 	    toggleSelected: this.toggleSelected, setFilter: this.setFilter, placeholder: this.props.placeholder, filterPlaceholder: this.props.filterPlaceholder, taggable: this.props.taggable})
 	}
 	});
@@ -193,7 +205,7 @@ var Selectron =
 	*/
 
 	var React = __webpack_require__(1);
-	var SelectronTagItem = __webpack_require__(6); 
+	var SelectronTagItem = __webpack_require__(7); 
 
 	var SelectronSelect = React.createClass({displayName: 'SelectronSelect',
 	  handleClick: function(e){
@@ -235,7 +247,7 @@ var Selectron =
 	*/
 
 	var React = __webpack_require__(1);
-	var SelectronList = __webpack_require__(7);
+	var SelectronList = __webpack_require__(6);
 
 	var SelectronDropContainer = React.createClass({displayName: 'SelectronDropContainer',
 	  render: function(){
@@ -267,33 +279,6 @@ var Selectron =
 	*/
 
 	var React = __webpack_require__(1);
-
-	var SelectronTagItem = React.createClass({displayName: 'SelectronTagItem',
-	  handleClick: function(e){
-	    this.props.toggleSelected(e.target.dataset.value);
-	  },
-	  render: function(){
-	    return React.DOM.button({type: "button", class: "btn btn-primary", 'data-value': this.props.option.value, onClick: this.handleClick}, this.props.option.text)
-	  }
-	});
-
-	module.exports = SelectronTagItem; 
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */
-
-	/*
-	   Selectron - Select Component for React
-	   https://github.com/DynamicTyped/selectron
-	   Copyright (c) 2014 DynamicTyped
-
-	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/selectron/master/LICENSE
-	*/
-
-	var React = __webpack_require__(1);
 	var SelectronListItem = __webpack_require__(8);
 	var SelectronSearch = __webpack_require__(9);
 
@@ -310,6 +295,33 @@ var Selectron =
 	});
 
 	module.exports = SelectronList; 
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */
+
+	/*
+	   Selectron - Select Component for React
+	   https://github.com/DynamicTyped/selectron
+	   Copyright (c) 2014 DynamicTyped
+
+	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/selectron/master/LICENSE
+	*/
+
+	var React = __webpack_require__(1);
+
+	var SelectronTagItem = React.createClass({displayName: 'SelectronTagItem',
+	  handleClick: function(e){
+	    this.props.toggleSelected(e.target.dataset.value);
+	  },
+	  render: function(){
+	    return React.DOM.button({type: "button", class: "btn btn-primary", 'data-value': this.props.option.value, onClick: this.handleClick}, this.props.option.text)
+	  }
+	});
+
+	module.exports = SelectronTagItem; 
 
 /***/ },
 /* 8 */
