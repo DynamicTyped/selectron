@@ -27,7 +27,8 @@ getDefaultProps: function(){
       "filterPlaceholder":"filter",
       "multiSelect": false,
       "taggable": false,
-      "dataChanged": null
+      "dataChanged": null,
+      "singleSelectSame": false
     }
 },
 getInitialState: function(){
@@ -54,7 +55,7 @@ toggleSelected: function(value){
     }
   } else {
     //clear all and add if not currently selected
-    if (result.length > 0){
+    if (result.length > 0 && !this.props.singleSelectSame){
       return; 
     }
 

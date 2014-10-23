@@ -21,7 +21,6 @@ var SelectronSelect = React.createClass({
     var that = this; 
     //show placeholder or the text
 	var selectedItems = "";
-
     if (this.props.selected && this.props.selected.length > 0){
 
       var selectedItems = that.props.taggable ? 

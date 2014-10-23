@@ -162,7 +162,7 @@
 
     <script type="text/jsx">
       /** @jsx React.DOM */
-      React.renderComponent(<Selectron options={options} dataChanged={dataChange}/>, document.getElementById('selectable'));
+      React.renderComponent(<Selectron options={options} dataChanged={dataChange} selected={[options[0]]}/>, document.getElementById('selectable'));
     </script>
     <button class="load-modal">Modal</button>
   </body>
