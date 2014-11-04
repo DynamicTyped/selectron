@@ -285,7 +285,7 @@ var Selectron =
 	    this.props.toggleSelected(e.target.dataset.value);
 	  },
 	  render: function(){
-	    return React.DOM.button({type: "button", class: "btn btn-primary", 'data-value': this.props.option.value, onClick: this.handleClick}, this.props.option.text)
+	    return React.DOM.button({type: "button", className: "btn btn-primary", 'data-value': this.props.option.value, onClick: this.handleClick}, this.props.option.text)
 	  }
 	});
 
